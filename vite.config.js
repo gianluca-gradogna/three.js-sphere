@@ -26,7 +26,7 @@ export default defineConfig({
       output: {
         format: 'umd',
         entryFileNames: 'main.js',
-        esModule: false,
+        esModule: true,
         compact: true,
         globals: {
           jquery: '$',
