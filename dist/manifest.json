@@ -1,6 +1,6 @@
 {
   "src/main.js": {
-    "file": "main.js",
+    "file": "webgl-app.umd.js",
     "src": "src/main.js",
     "isEntry": true
   }
