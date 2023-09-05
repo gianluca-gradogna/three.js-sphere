@@ -3,21 +3,22 @@ import {
     Mesh,
     Object3D,
     IcosahedronGeometry,
-    TextureLoader,
     MeshStandardMaterial,
   } from "three"
   import { gsap } from "gsap"
-  //import tweak from '@/js/utils/debugger'
+  import tweak from "../utils/debugger"
   
   const PARAMS = {
-    color1: '#000',
+    color1: '#fff',
     color2: '#fff',
     timeScale: 1.2,
-    noiseScale: .07,
-    noiseAmplitude: 7.5,
+    noiseScale: .1,
+    noiseAmplitude: 4.1,
     amplitudeStrength: 7,
     radius: .35,
     details: 150,
+    contrast: 1,
+    brightness: 0,
     wireframe: false
   }
   
@@ -39,25 +40,27 @@ import {
   
       const tl = gsap.timeline({repeat: -1})
       tl.to(this.position, {
-        keyframes: {y: [-.08, .08, -.08], ease: 'linear'},
+        keyframes: {y: [-.07, .07, -.07], ease: 'linear'},
         duration: 3,
         ease: 'sine.inOut'
       })
   
       this.addEventListeners();
-    //   this.addDebug()
+      this.addDebug()
     }
   
-    // addDebug() {
-    //   tweak.addInput(PARAMS, 'color1').on('change', (ev) => { this.material.uniforms.uColor1.value = new Color(ev.value) })
-    //   tweak.addInput(PARAMS, 'color2').on('change', (ev) => { this.material.uniforms.uColor2.value = new Color(ev.value) })
-    //   tweak.addInput(PARAMS, 'timeScale', {min: 0, max: 2}).on('change', (ev) => { this.material.uniforms.uTimeScale.value = ev.value })
-    //   tweak.addInput(PARAMS, 'noiseScale', {min: -1, max: 2}).on('change', (ev) => { this.material.uniforms.uNoiseScale.value = ev.value })
-    //   tweak.addInput(PARAMS, 'noiseAmplitude', {min: 0, max: 10}).on('change', (ev) => { this.material.uniforms.uNoiseAmplitude.value = ev.value })
-    //   tweak.addInput(PARAMS, 'amplitudeStrength', {min: 0, max: 40}).on('change', (ev) => { this.material.uniforms.uAmplitudeStrength.value = ev.value })
-    //   tweak.addInput(PARAMS, 'details', {min: 2, max: 200, step: 1}).on('change', (ev) => { this.mesh.geometry = new IcosahedronGeometry(.5, ev.value) })
-    //   tweak.addInput(PARAMS, 'wireframe').on('change', (ev) => { this.material.wireframe = ev.value })
-    // }
+    addDebug() {
+      tweak.addBinding(PARAMS, 'color1').on('change', (ev) => { this.material.uniforms.uColor1.value = new Color(ev.value) })
+      tweak.addBinding(PARAMS, 'color2').on('change', (ev) => { this.material.uniforms.uColor2.value = new Color(ev.value) })
+      tweak.addBinding(PARAMS, 'timeScale', {min: 0, max: 2}).on('change', (ev) => { this.material.uniforms.uTimeScale.value = ev.value })
+      tweak.addBinding(PARAMS, 'noiseScale', {min: -1, max: 2}).on('change', (ev) => { this.material.uniforms.uNoiseScale.value = ev.value })
+      tweak.addBinding(PARAMS, 'noiseAmplitude', {min: 0, max: 10}).on('change', (ev) => { this.material.uniforms.uNoiseAmplitude.value = ev.value })
+      tweak.addBinding(PARAMS, 'amplitudeStrength', {min: 0, max: 40}).on('change', (ev) => { this.material.uniforms.uAmplitudeStrength.value = ev.value })
+      tweak.addBinding(PARAMS, 'contrast', {min: 0, max: 2}).on('change', (ev) => { this.material.uniforms.uContrast.value = ev.value })
+      tweak.addBinding(PARAMS, 'brightness', {min: 0, max: 1}).on('change', (ev) => { this.material.uniforms.uBrightness.value = ev.value })
+      tweak.addBinding(PARAMS, 'details', {min: 2, max: 200, step: 1}).on('change', (ev) => { this.mesh.geometry = new IcosahedronGeometry(.5, ev.value) })
+      tweak.addBinding(PARAMS, 'wireframe').on('change', (ev) => { this.material.wireframe = ev.value })
+    }
   
     addEventListeners() {
       document.addEventListener('mousemove', this.onMouseMove)
@@ -65,14 +68,11 @@ import {
   
     createMaterial() {
       this.material = new MeshStandardMaterial({
-        // envMap: this.hdrEnv.TextureLoader,
-        // envMapIntensity: 1,
-        reflectivity: 1,
         roughness: 0,
         metalness: 0,
         wireframe: PARAMS.wireframe
       })
- 
+
       this.uniforms = {
         uMap: { value: this.mapTexture },
         uColor1: { value: new Color(PARAMS.color1) },
@@ -81,7 +81,9 @@ import {
         uTimeScale: { value: PARAMS.timeScale },
         uNoiseAmplitude: { value: PARAMS.noiseAmplitude },
         uNoiseScale: { value: PARAMS.noiseScale },
-        uAmplitudeStrength: { value: PARAMS.amplitudeStrength }
+        uAmplitudeStrength: { value: PARAMS.amplitudeStrength },
+        uContrast: {value: PARAMS.contrast},
+        uBrightness: {value: PARAMS.brightness},
       }
   
       this.material.onBeforeCompile = (e) => {
@@ -189,6 +191,8 @@ import {
           uniform vec3 uColor1;
           uniform vec3 uColor2;
           uniform float uAmplitudeStrength;
+          uniform float uContrast;
+          uniform float uBrightness;
   
           varying vec2 vUv;
           varying float vAmplitude;
@@ -206,7 +210,11 @@ import {
           vec3 color = tex * outgoingLight;
           float elevation = vAmplitude * uAmplitudeStrength + .5;
           color *= mix(uColor1, uColor2, elevation);
-  
+          color.r = smoothstep(0., .38, color.r);
+          color.g = smoothstep(0., .38, color.g);
+          color.b = smoothstep(0., .38, color.b);
+          color = uContrast * (color - .5) + .5 + uBrightness;
+          
           gl_FragColor = vec4(color, diffuseColor.a);
       `)
       }
@@ -216,6 +224,8 @@ import {
   
     createMesh() {
       this.mesh = new Mesh(this.geometry, this.material);
+      this.mesh.scale.multiplyScalar(1.2)
+      this.mesh.position.y = -.2
       this.add(this.mesh);
     }
   
@@ -234,13 +244,11 @@ import {
       uTime.value = time
 
       if(!this.mesh)return
-      current.x = gsap.utils.interpolate(current.x, target.x, ease * gsap.ticker.deltaRatio(60))
-      current.y = gsap.utils.interpolate(current.y, target.y, ease * gsap.ticker.deltaRatio(60))
-      
+      current.x = gsap.utils.interpolate(current.x, target.x, ease * gsap.ticker.deltaRatio(60) || 0)
+      current.y = gsap.utils.interpolate(current.y, target.y, ease * gsap.ticker.deltaRatio(60) || 0)
 
-      // this.mesh.rotation.x = -current.y * .2
-      // this.mesh.rotation.y = Math.PI * -current.x * .2
-  
+      this.mesh.rotation.x = -current.y * .8
+      this.mesh.rotation.y = Math.PI * -current.x * .8
       // this.mesh.position.y = current.y * .1
       // uNoiseScale.value = (PARAMS.noiseScale * Math.abs(current.x) * 10) + PARAMS.noiseScale
       // uAmplitudeStrength.value = (PARAMS.amplitudeStrength * Math.abs(current.x) * -.9) + PARAMS.amplitudeStrength

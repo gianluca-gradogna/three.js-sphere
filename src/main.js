@@ -22,18 +22,11 @@ export class WebglApp {
         
         //Load Assets
         const mapTexture = new TextureLoader().load(mapSrc);
-        let hdrEnv = null
-        const pmremGenerator = new PMREMGenerator(renderer);
-        pmremGenerator.compileCubemapShader();
-        const hdrCubeMap = new CubeTextureLoader().setPath(hdrPath).load(hdrSrc, function() {
-        hdrEnv = pmremGenerator.fromCubemap(hdrCubeMap)
-        
-        });
+        const hdrEnv = new CubeTextureLoader().setPath(hdrPath).load(hdrSrc);
 
 // Scena
 const scene = new Scene(); 
-scene.environment = hdrEnv?.texture
-
+scene.environment = hdrEnv
 
 // Camera
 const camera = new PerspectiveCamera(
@@ -44,8 +37,6 @@ const camera = new PerspectiveCamera(
 );
 camera.position.z = 1;
 scene.add(camera);
-
-
 
 
 //sphere
