@@ -1,5 +1,5 @@
-import {Pane} from 'tweakpane'
+// import {Pane} from 'tweakpane'
 
-const tweak = new Pane()
+// const tweak = new Pane()
 
-export default tweak;
+// export default tweak;

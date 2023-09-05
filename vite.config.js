@@ -19,7 +19,7 @@ export default defineConfig({
       entry: './src/main.js',
       name: 'WebglApp',
       // the proper extensions will be added
-      fileName: 'webgl-app',
+      fileName: 'webgl-sphere-app',
     },
     rollupOptions: {
       // input: './src/main.js',
