@@ -5,7 +5,6 @@ import MeshSphere from "./meshes/MeshSphere";
 
 export class WebglApp {
     constructor({mapSrc, hdrPath, hdrSrc}){
-
         // Canvas
         const canvas = document.getElementById("webgl");
 
@@ -14,7 +13,6 @@ export class WebglApp {
             antialias: false,
             alpha: true,
         });
-        
         
         renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
         renderer.setSize(window.innerWidth, window.innerHeight);

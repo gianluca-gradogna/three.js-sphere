@@ -13,10 +13,16 @@ export default defineConfig({
     },
   },
   build: {
-    minify: false,
+    minify: true,
     manifest: true,
+    lib: {
+      entry: './src/main.js',
+      name: 'WebglApp',
+      // the proper extensions will be added
+      fileName: 'webgl-app',
+    },
     rollupOptions: {
-      input: './src/main.js',
+      // input: './src/main.js',
       output: {
         format: 'umd',
         entryFileNames: 'main.js',
