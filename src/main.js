@@ -1,6 +1,6 @@
 import './styles/style.css'
 import {Scene, PerspectiveCamera, WebGLRenderer, TextureLoader, Mesh, IcosahedronGeometry, MeshStandardMaterial, CubeTextureLoader, PMREMGenerator} from 'three'
-import {Pane} from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.0/dist/tweakpane.min.js';
+// import {Pane} from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.0/dist/tweakpane.min.js';
 import MeshSphere from "./meshes/MeshSphere";
 
 export class WebglApp {

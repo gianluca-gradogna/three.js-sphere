@@ -6,7 +6,7 @@ import {
     MeshStandardMaterial,
   } from "three"
   import { gsap } from "gsap"
-  import tweak from "../utils/debugger"
+  // import tweak from "../utils/debugger"
   
   const PARAMS = {
     color1: '#fff',
@@ -46,21 +46,21 @@ import {
       })
   
       this.addEventListeners();
-      this.addDebug()
+      // this.addDebug()
     }
   
-    addDebug() {
-      tweak.addBinding(PARAMS, 'color1').on('change', (ev) => { this.material.uniforms.uColor1.value = new Color(ev.value) })
-      tweak.addBinding(PARAMS, 'color2').on('change', (ev) => { this.material.uniforms.uColor2.value = new Color(ev.value) })
-      tweak.addBinding(PARAMS, 'timeScale', {min: 0, max: 2}).on('change', (ev) => { this.material.uniforms.uTimeScale.value = ev.value })
-      tweak.addBinding(PARAMS, 'noiseScale', {min: -1, max: 2}).on('change', (ev) => { this.material.uniforms.uNoiseScale.value = ev.value })
-      tweak.addBinding(PARAMS, 'noiseAmplitude', {min: 0, max: 10}).on('change', (ev) => { this.material.uniforms.uNoiseAmplitude.value = ev.value })
-      tweak.addBinding(PARAMS, 'amplitudeStrength', {min: 0, max: 40}).on('change', (ev) => { this.material.uniforms.uAmplitudeStrength.value = ev.value })
-      tweak.addBinding(PARAMS, 'contrast', {min: 0, max: 2}).on('change', (ev) => { this.material.uniforms.uContrast.value = ev.value })
-      tweak.addBinding(PARAMS, 'brightness', {min: 0, max: 1}).on('change', (ev) => { this.material.uniforms.uBrightness.value = ev.value })
-      tweak.addBinding(PARAMS, 'details', {min: 2, max: 200, step: 1}).on('change', (ev) => { this.mesh.geometry = new IcosahedronGeometry(.5, ev.value) })
-      tweak.addBinding(PARAMS, 'wireframe').on('change', (ev) => { this.material.wireframe = ev.value })
-    }
+    // addDebug() {
+    //   tweak.addBinding(PARAMS, 'color1').on('change', (ev) => { this.material.uniforms.uColor1.value = new Color(ev.value) })
+    //   tweak.addBinding(PARAMS, 'color2').on('change', (ev) => { this.material.uniforms.uColor2.value = new Color(ev.value) })
+    //   tweak.addBinding(PARAMS, 'timeScale', {min: 0, max: 2}).on('change', (ev) => { this.material.uniforms.uTimeScale.value = ev.value })
+    //   tweak.addBinding(PARAMS, 'noiseScale', {min: -1, max: 2}).on('change', (ev) => { this.material.uniforms.uNoiseScale.value = ev.value })
+    //   tweak.addBinding(PARAMS, 'noiseAmplitude', {min: 0, max: 10}).on('change', (ev) => { this.material.uniforms.uNoiseAmplitude.value = ev.value })
+    //   tweak.addBinding(PARAMS, 'amplitudeStrength', {min: 0, max: 40}).on('change', (ev) => { this.material.uniforms.uAmplitudeStrength.value = ev.value })
+    //   tweak.addBinding(PARAMS, 'contrast', {min: 0, max: 2}).on('change', (ev) => { this.material.uniforms.uContrast.value = ev.value })
+    //   tweak.addBinding(PARAMS, 'brightness', {min: 0, max: 1}).on('change', (ev) => { this.material.uniforms.uBrightness.value = ev.value })
+    //   tweak.addBinding(PARAMS, 'details', {min: 2, max: 200, step: 1}).on('change', (ev) => { this.mesh.geometry = new IcosahedronGeometry(.5, ev.value) })
+    //   tweak.addBinding(PARAMS, 'wireframe').on('change', (ev) => { this.material.wireframe = ev.value })
+    // }
   
     addEventListeners() {
       document.addEventListener('mousemove', this.onMouseMove)
